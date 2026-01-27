@@ -25,7 +25,7 @@ async function loadCardDetail() {
   const id = getCardId();
   if(!id) return;
 
-  const { data: cards, error } = await sb
+  const { data: card, error } = await sb
     .from('cards')
     .select('*')
     .eq('id', id)
@@ -37,19 +37,30 @@ async function loadCardDetail() {
   }
 
   const container = document.querySelector('.card-detail-container');
+
+  // Použijeme pole real_images pokud existuje, jinak fallback na image_url
+  const images = card.real_images && card.real_images.length > 0 ? card.real_images : [card.image_url];
+
+  let imagesHtml = '';
+  images.forEach(url => {
+    imagesHtml += `<img class="card-image" src="${url}" alt="${card.name}">`;
+  });
+
   container.innerHTML = `
-    <img class="card-image" src="${cards.image_url}" alt="${cards.name}">
+    <div class="card-images-wrapper">
+      ${imagesHtml}
+    </div>
     <div class="card-info">
-      <h1>${cards.name}</h1>
-      <p class="price">${cards.price} Kč</p>
-      <p>${cards.description || "Žádný popis karty."}</p>
+      <h1>${card.name}</h1>
+      <p class="price">${card.price} Kč</p>
+      <p>${card.description || "Žádný popis karty."}</p>
       <button class="add-to-cart">Přidat do košíku</button>
     </div>
   `;
 
-  // Přidání animace fade
-  setTimeout(()=>{
-    document.querySelector('.card-image').style.opacity = 1;
+  // Přidání fade animace
+  setTimeout(() => {
+    document.querySelectorAll('.card-image').forEach(img => img.style.opacity = 1);
     document.querySelector('.card-info').style.opacity = 1;
   }, 50);
 }
