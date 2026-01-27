@@ -5,7 +5,7 @@ menuBtn.addEventListener('click', () => menu.classList.toggle('active'));
 
 // ESC zavře menu
 document.addEventListener('keydown', e => {
-  if(e.key==='Escape'){
+  if(e.key === 'Escape'){
     menu.classList.remove('active');
   }
 });
@@ -38,9 +38,20 @@ async function loadCardDetail() {
 
   const container = document.querySelector('.card-detail-container');
 
-  // Použijeme pole real_images pokud existuje, jinak fallback na image_url
-  const images = card.real_images && card.real_images.length > 0 ? card.real_images : [card.image_url];
+  // Převod real_images z JSON, fallback na image_url
+  let images = [card.image_url];
+  if(card.real_images){
+    try {
+      const parsed = JSON.parse(card.real_images);
+      if(Array.isArray(parsed) && parsed.length > 0){
+        images = parsed;
+      }
+    } catch(e){
+      console.warn("real_images není validní JSON, použije se fallback image_url");
+    }
+  }
 
+  // Vytvoření HTML pro fotky
   let imagesHtml = '';
   images.forEach(url => {
     imagesHtml += `<img class="card-image" src="${url}" alt="${card.name}">`;
@@ -56,13 +67,29 @@ async function loadCardDetail() {
       <p>${card.description || "Žádný popis karty."}</p>
       <button class="add-to-cart">Přidat do košíku</button>
     </div>
+    <div class="lightbox" id="lightbox"><img src="" alt=""></div>
   `;
 
-  // Přidání fade animace
+  // Fade animace
   setTimeout(() => {
     document.querySelectorAll('.card-image').forEach(img => img.style.opacity = 1);
     document.querySelector('.card-info').style.opacity = 1;
   }, 50);
+
+  // Lightbox pro kliknutí na fotku
+  const lightbox = document.getElementById('lightbox');
+  document.querySelectorAll('.card-image').forEach(img => {
+    img.addEventListener('click', () => {
+      lightbox.querySelector('img').src = img.src;
+      lightbox.classList.add('active');
+    });
+  });
+
+  // Zavření lightboxu po kliknutí
+  lightbox.addEventListener('click', () => {
+    lightbox.classList.remove('active');
+  });
 }
 
+// Spustit načtení
 window.addEventListener('DOMContentLoaded', loadCardDetail);
