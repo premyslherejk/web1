@@ -103,12 +103,17 @@ h1{
 }
 
 @media (min-width:901px){
-  .info{height:100%;}
+  .info{
+    display:flex;
+    flex-direction:column;
+  }
+
   .buy-box{
     margin-top:auto;
     transform:translateY(-140px);
   }
 }
+
 
 @media(max-width:900px){
   body{padding:20px;}
@@ -149,3 +154,4 @@ h1{
 .arrow.left{left:20px;}
 .arrow.right{right:20px;}
 .close{top:20px;right:30px;}
+
