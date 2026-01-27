@@ -38,20 +38,24 @@ async function loadCardDetail() {
 
   const container = document.querySelector('.card-detail-container');
 
-  // Převod real_images z JSON, fallback na image_url
-  let images = [card.image_url];
+  // Zkusíme vzít real_images jako JSON
+  let images = [];
   if(card.real_images){
     try {
       const parsed = JSON.parse(card.real_images);
       if(Array.isArray(parsed) && parsed.length > 0){
-        images = parsed;
+        images = parsed; // tady bereme ty reálné fotky
       }
     } catch(e){
       console.warn("real_images není validní JSON, použije se fallback image_url");
     }
   }
 
-  // Vytvoření HTML pro fotky
+  // fallback jen pokud není ani jedna real fotka
+  if(images.length === 0){
+    images = [card.image_url];
+  }
+
   let imagesHtml = '';
   images.forEach(url => {
     imagesHtml += `<img class="card-image" src="${url}" alt="${card.name}">`;
@@ -76,7 +80,7 @@ async function loadCardDetail() {
     document.querySelector('.card-info').style.opacity = 1;
   }, 50);
 
-  // Lightbox pro kliknutí na fotku
+  // Lightbox
   const lightbox = document.getElementById('lightbox');
   document.querySelectorAll('.card-image').forEach(img => {
     img.addEventListener('click', () => {
@@ -85,11 +89,9 @@ async function loadCardDetail() {
     });
   });
 
-  // Zavření lightboxu po kliknutí
   lightbox.addEventListener('click', () => {
     lightbox.classList.remove('active');
   });
 }
 
-// Spustit načtení
 window.addEventListener('DOMContentLoaded', loadCardDetail);
