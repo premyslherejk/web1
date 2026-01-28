@@ -155,10 +155,20 @@ h1{
 .arrow.right{right:20px;}
 .close{top:20px;right:30px;}
 
-.psa{
-  font-size:1rem;
-  font-weight:800;
-  color:#4c2cff;
-  margin-top:-6px;
+.psa {
+  display: inline-block;
+  background: #6c4cff; /* fialová */
+  color: #fff;
+  font-weight: 800;
+  font-size: 0.95rem;
+  padding: 6px 12px;
+  border-radius: 999px;
+  margin-top: 6px;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.psa:hover {
+  opacity: 0.9;
 }
 
