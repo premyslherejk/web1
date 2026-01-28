@@ -4,10 +4,11 @@ const supabaseKey =
 
 const sb = supabase.createClient(supabaseUrl, supabaseKey);
 
-// ========= ELEMENTY =========
+// ========= ID =========
 const id = new URLSearchParams(window.location.search).get('id');
 if (!id) throw new Error('Chybí ID karty v URL');
 
+// ========= ELEMENTY =========
 const thumbsWrap = document.getElementById('thumbs');
 const mainImg = document.getElementById('current');
 const light = document.getElementById('lightbox');
@@ -18,6 +19,8 @@ const descEl = document.getElementById('description');
 const priceEl = document.getElementById('price');
 const metaEl = document.getElementById('meta');
 const statusEl = document.getElementById('status');
+const psaEl = document.getElementById('psa');
+const psaInfoEl = document.getElementById('psa-info');
 
 let images = [];
 let index = 0;
@@ -35,27 +38,30 @@ async function loadCard() {
     return;
   }
 
-  // ===== DATA =====
+  // ===== ZÁKLADNÍ DATA =====
   nameEl.textContent = card.name || '';
   descEl.textContent = card.description || '';
   priceEl.textContent = `${card.price} Kč`;
   metaEl.textContent = `Edice: ${card.set || '—'} · Stav: ${card.condition || '—'}`;
 
   // ===== STATUS =====
-  statusEl.classList.remove('graded');
-  const psaEl = document.getElementById('psa');
+  statusEl.textContent = card.status || 'Skladem';
 
-// STATUS – vždy nahoře
-statusEl.textContent = card.status || 'Skladem';
-statusEl.classList.remove('graded');
+  // ===== PSA =====
+  psaEl.textContent = '';
+  psaInfoEl.style.display = 'none';
 
-// PSA – zvlášť pod názvem
-psaEl.textContent = '';
+  if (card.psa_grade) {
+    psaEl.textContent = `PSA ${card.psa_grade}`;
+    psaInfoEl.style.display = 'block';
 
-if (card.psa_grade) {
-  psaEl.textContent = `PSA ${card.psa_grade}`;
-}
-
+    psaEl.onclick = () => {
+      psaInfoEl.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
+    };
+  }
 
   // ===== IMAGES =====
   images = [];
@@ -90,7 +96,7 @@ function renderImages() {
     img.src = src;
     if (i === 0) img.classList.add('active');
 
-    img.addEventListener('click', () => setImage(i));
+    img.onclick = () => setImage(i);
     thumbsWrap.appendChild(img);
   });
 }
@@ -127,4 +133,3 @@ document.addEventListener('keydown', e => {
 
 // ========= START =========
 loadCard();
-
