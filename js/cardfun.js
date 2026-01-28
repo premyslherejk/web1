@@ -43,12 +43,19 @@ async function loadCard() {
 
   // ===== STATUS =====
   statusEl.classList.remove('graded');
-  statusEl.textContent = card.status || 'Skladem';
+  const psaEl = document.getElementById('psa');
 
-  if (card.psa_grade) {
-    statusEl.textContent = `PSA ${card.psa_grade}`;
-    statusEl.classList.add('graded');
-  }
+// STATUS – vždy nahoře
+statusEl.textContent = card.status || 'Skladem';
+statusEl.classList.remove('graded');
+
+// PSA – zvlášť pod názvem
+psaEl.textContent = '';
+
+if (card.psa_grade) {
+  psaEl.textContent = `PSA ${card.psa_grade}`;
+}
+
 
   // ===== IMAGES =====
   images = [];
@@ -120,3 +127,4 @@ document.addEventListener('keydown', e => {
 
 // ========= START =========
 loadCard();
+
