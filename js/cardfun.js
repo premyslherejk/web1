@@ -1,5 +1,5 @@
 const supabaseUrl = 'https://hwjbfrhbgeczukcjkmca.supabase.co';
-const supabaseKey = 'TVŮJ_KEY'; // nechávám jak máš
+const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh3amJmcmhiZ2VjenVrY2prbWNhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk0NDU5MjQsImV4cCI6MjA4NTAyMTkyNH0.BlgIov7kFq2EUW17hLs6o1YujL1i9elD7wILJP6h-lQ'; // nechávám jak máš
 const sb = supabase.createClient(supabaseUrl, supabaseKey);
 
 // ========= ID =========
@@ -113,3 +113,4 @@ document.addEventListener('keydown',e=>{
 
 // ========= START =========
 loadCard();
+
